@@ -1,0 +1,19 @@
+{
+	"name": "iqnection-pages/protectedareapage",
+	"description": "SilverStripe 3 Minisite Page",
+	"type": "silverstripe-module",
+	"keywords": ["iqnection","pages"],
+	"authors": [
+		{
+			"name": "IQnection",
+            "homepage": "http://www.iqnection.com"
+		}
+	],
+	"require": {
+		"silverstripe/framework": ">=3.0",
+		"iqnection-pages/basepages":"*"
+	},
+	"extra": {
+		"installer-name": "iq-protectedareapage"
+	}
+}

@@ -1,0 +1,9 @@
+Page:
+  extensions:
+    - ProtectedArea_Page_Extension
+Page_Controller:
+  extensions:
+    - ProtectedArea_Page_Controller_Extension
+LeftAndMain:
+  extra_requirements_css:
+    - iq-protectedareapage/css/cms/leftandmainadditions.css

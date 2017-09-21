@@ -1,0 +1,5 @@
+
+
+.protected-area-message							{ margin:30px 0; padding:10px; background:#ffe7c2; border:2px solid #ffa3a4; border-radius:6px; }
+.protected-area-message:after					{ content:"."; display:block; height:0; clear:both; zoom:1; visibility:hidden; }
+
