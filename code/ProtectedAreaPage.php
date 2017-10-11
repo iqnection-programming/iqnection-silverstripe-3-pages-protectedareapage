@@ -95,7 +95,7 @@ class ProtectedAreaPage_Controller extends Page_Controller
 	
 	public function change_password()
 	{
-		return $this;
+		return $this->renderWith(array('ProtectedAreaPage_change_password','Page'));
 	}
 	
 	public function reset_password()
@@ -165,13 +165,13 @@ class ProtectedAreaPage_Controller extends Page_Controller
 		{
 			$form->sessionMessage("You must provide an email and password to login",'bad');
 			Session::set('BackURL',$data['BackURL']);
-			return $this->redirectBack();
+			return $this->redirect($this->Link());
 		}
 		if (!$User = ProtectedAreaUser::get()->filter(array('Email' => $Email,'Active' => 1))->First())
 		{
 			$form->sessionMessage("Invalid email or password",'bad');
 			Session::set('BackURL',$data['BackURL']);
-			return $this->redirectBack();
+			return $this->redirect($this->Link());
 		}
 		if ($User->CheckPassword($data['Password']))
 		{
@@ -189,7 +189,7 @@ class ProtectedAreaPage_Controller extends Page_Controller
 		}
 		$form->sessionMessage("Invalid email or password",'bad');
 		Session::set('BackURL',$data['BackURL']);
-		return $this->redirectBack();
+		return $this->redirect($this->Link());
 	}
 	
 	public function ChangeProtectedAreaUserPasswordForm()

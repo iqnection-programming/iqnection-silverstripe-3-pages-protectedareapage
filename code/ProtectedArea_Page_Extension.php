@@ -104,24 +104,40 @@ class ProtectedArea_Page_Controller_Extension extends Extension
 		if (Member::CurrentUser()) { return; }
 		if (!$this->owner->UserCanViewPage())
 		{
+			$action = $this->owner->request->param('Action');
 			if (!$User = $this->owner->ProtectedAreaUser())
 			{
 				// don't redirect if we're requesting the login page or the login form
-				$action = $this->owner->request->param('Action');
 				$allowedActions = array(
 					'login',
+					'logout',
 					'ProtectedAreaUserLoginForm',
 					'reset_password',
 					'ResetProtectedAreaUserPasswordForm'
 				);
-				if (!in_array($action,$allowedActions))
+				if ( (!in_array($action,$allowedActions)) && ($page = $this->owner->ProtectiveParent()) )
 				{
-					return $this->owner->redirect($this->owner->ProtectiveParent()->Link('login?BackURL='.urlencode($this->owner->request->requestVar('url'))));
+					return $this->owner->redirect($page->Link('login?BackURL='.urlencode($this->owner->request->requestVar('url'))));
 				}
 			}
 			else
 			{// user is logged in
-				$action = 'permission_error';
+				if ($this->owner->ProtectiveParent()->ID == $this->owner->ID)
+				{
+					$allowedActions = array(
+						'logout',
+						'reset_password',
+						'ResetProtectedAreaUserPasswordForm'
+					);
+					if (!in_array($action,$allowedActions))
+					{
+						$action = 'permission_error';
+					}
+				}
+				else
+				{
+					$action = 'permission_error';
+				}				
 			}
 		}
 	}	
