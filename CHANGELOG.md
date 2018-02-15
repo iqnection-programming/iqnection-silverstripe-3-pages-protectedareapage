@@ -1,6 +1,9 @@
-## Package: iqnection-silverstripe-3-pages-protectedareapage
+## Package: iqnection-silverstripe-pages-protectedareapage
 # Change Log
 
+
+## [2.0.0]
+- updated for SilverStripe 4
 
 ## [0.0.2]
 - improvements

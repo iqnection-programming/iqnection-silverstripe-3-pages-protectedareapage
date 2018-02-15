@@ -1,5 +1,5 @@
-# iqnection-silverstripe-3-pages-protectedareapage
-SilverStripe 3 Protected Area Page
+# iqnection-silverstripe-pages-protectedareapage
+SilverStripe Protected Area Page
 
 ## Features
 protects all pages that are children of a ProtectedAreaPage

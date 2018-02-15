@@ -9,13 +9,6 @@
 Email: $Email<br />
 Password: $NewPassword
 
-<% if $ProtectedAreaUserGroups.Count %>
-<br /><br />
-You now have access to the following content:<br />
-<% with $ProtectedAreaUserGroups.First.Pages.First.ProtectiveParent %>
-	<a href="$AbsoluteLink" target="_blank">$AbsoluteLink</a>
-<% end_with %>
-<% end_if %>
 </p>
 
 

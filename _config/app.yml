@@ -1,9 +1,13 @@
+---
+Name: iqprotectedareapage
+---
 Page:
   extensions:
-    - ProtectedArea_Page_Extension
-Page_Controller:
+    - ProtectedAreaPageExtension
+PageController:
   extensions:
-    - ProtectedArea_Page_Controller_Extension
-LeftAndMain:
+    - ProtectedAreaPageControllerExtension
+SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - iq-protectedareapage/css/cms/leftandmainadditions.css
+    - iq-protectedareapage/cms/css/leftandmainadditions.css
+---
