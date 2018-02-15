@@ -1,6 +1,6 @@
 {
 	"name": "iqnection-pages/protectedareapage",
-	"description": "SilverStripe Minisite Page",
+	"description": "SilverStripe Protected Area Page",
 	"type": "silverstripe-module",
 	"keywords": ["iqnection","pages"],
 	"license": "BSD-3-Clause",
