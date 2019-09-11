@@ -1,10 +1,12 @@
 <?php
 
 
-use SilverStripe\Core;
+namespace IQnection\ProtectedArea\Page;
+
+use SilverStripe\Core\Extension;
 use SilverStripe\Security\Security;
 
-class ProtectedAreaPageControllerExtension extends Core\Extension
+class PageController extends Extension
 {
 	private static $allowed_actions = [
 		'permission_error'

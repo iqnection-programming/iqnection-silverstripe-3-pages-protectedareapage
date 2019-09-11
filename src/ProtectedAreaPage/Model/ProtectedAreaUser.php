@@ -1,5 +1,7 @@
 <?php
 
+namespace IQnection\ProtectedArea\Model;
+
 use SilverStripe\ORM;
 use SilverStripe\Forms;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -15,6 +17,7 @@ class ProtectedAreaUser extends ORM\DataObject
 	private static $secure_salt = 'b391a4df558331de1668df9086c57a9f';
 	private static $cookie_name = '_ppu';
 	private static $cookie_lifetime = 1;
+	private static $admin_email = 'info@%s';
 	
 	private static $db = [
 		'Active' => 'Boolean',
@@ -46,7 +49,7 @@ class ProtectedAreaUser extends ORM\DataObject
 	
 	public function getTitle()
 	{
-		return $this->FirstName.' '.$this->LastName;
+		return $this->FullName();
 	}
 
 	public function getCMSFields()
@@ -146,7 +149,7 @@ class ProtectedAreaUser extends ORM\DataObject
 			$this->SiteDomain = preg_replace('/(\/)$/','',preg_replace('/http(s)?\:\/\//','',$_SERVER['HTTP_HOST']));
 			Email::create()
 				->setTo($this->Email,$this->FirstName.' '.$this->LastName)
-				->setFrom('donotreply@'.$domain,$siteConfig->Title)
+				->setFrom($this->getAdminEmail())
 				->setSubject($siteConfig->Title.' Credentials')
 				->setHTMLTemplate('emails/email_PasswordSet')
 				->setData($this)
@@ -154,14 +157,25 @@ class ProtectedAreaUser extends ORM\DataObject
 		}
 	}
 	
+	public function getAdminEmail()
+	{
+		$explode = array_reverse(explode('.',$_SERVER['HTTP_HOST']));
+		$domain = implode('.',array_reverse(array(array_shift($explode),array_shift($explode))));
+		$email = sprintf($this->Config()->get('admin_email'),$domain);
+		$this->extend('updateAdminEmail', $email);
+		return $email;
+	}
+	
 	public function GeneratePassword()
 	{
-		return substr(md5(strtotime('now').$_SERVER['REMOTE_ADDR']),0,intval($this->Config()->get('min_password_length')));
+		$password = substr(md5(strtotime('now').$_SERVER['REMOTE_ADDR']),0,intval($this->Config()->get('min_password_length'))); 
+		$this->extend('updateGeneratedPassword', $password);
+		return $password;
 	}
 	
 	public function EncryptPassword($password)
 	{
-		$encryptor = new SilverStripe\Security\PasswordEncryptor_Blowfish();
+		$encryptor = new \SilverStripe\Security\PasswordEncryptor_Blowfish();
 		$Salt = $encryptor->salt($password);
 		$encryptedPassword = $encryptor->encrypt($password,substr($Salt,0,25).substr($this->Config()->get('secure_salt'),0,25));
 		return array('Password' => $encryptedPassword, 'Salt' => $Salt);
@@ -169,13 +183,13 @@ class ProtectedAreaUser extends ORM\DataObject
 	
 	public function CheckPassword($password)
 	{
-		$encryptor = new SilverStripe\Security\PasswordEncryptor_Blowfish();
+		$encryptor = new \SilverStripe\Security\PasswordEncryptor_Blowfish();
 		return $encryptor->check($this->Password, $password, substr($this->PasswordSalt,0,25).substr($this->Config()->get('secure_salt'),0,25));	
 	}
 	
 	public function CheckTempPassword($password)
 	{
-		$encryptor = new SilverStripe\Security\PasswordEncryptor_Blowfish();
+		$encryptor = new \SilverStripe\Security\PasswordEncryptor_Blowfish();
 		return $encryptor->check($this->TempPassword, $password, substr($this->TempPasswordSalt,0,25).substr($this->Config()->get('secure_salt'),0,25));	
 	}
 	
@@ -269,7 +283,7 @@ class ProtectedAreaUser extends ORM\DataObject
 		$domain = implode('.',array_reverse(array(array_shift($explode),array_shift($explode))));
 		Email::create()
 			->setTo($this->Email,$this->FirstName.' '.$this->LastName)
-			->setFrom('donotreply@'.$domain,$siteConfig->Title)
+			->setFrom($this->getAdminEmail())
 			->setSubject($siteConfig->Title.' Password Reset')
 			->setHTMLTemplate('emails/email_PasswordReset')
 			->setData($this)

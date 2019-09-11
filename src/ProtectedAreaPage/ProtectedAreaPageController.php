@@ -1,10 +1,13 @@
 <?php
 
+namespace IQnection\ProtectedArea\ProtectedAreaPage;
+
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms;
-use IqBasePages\FormUtilities\FormUtilities;
+use IQnection\FormUtilities\FormUtilities;
+use IQnection\ProtectedArea\Model\ProtectedAreaUser;
 
-class ProtectedAreaPageController extends PageController
+class ProtectedAreaPageController extends \PageController
 {
 	private static $allowed_actions = [
 		'login',
@@ -16,14 +19,9 @@ class ProtectedAreaPageController extends PageController
 		'logout',
 	];
 	
-	public function PageCSS()
-	{
-		return ['css/form.css'];
-	}
-	
 	public function ProtectedAreaUserConfig($var)
 	{
-		return Config::inst()->get('ProtectedAreaUser',$var);
+		return Config::inst()->get(ProtectedAreaUser::class,$var);
 	}
 		
 	public function index()
@@ -183,9 +181,9 @@ class ProtectedAreaPageController extends PageController
 			$form->sessionMessage('Invalid Password','bad');
 			return $this->redirectBack();
 		}
-		if (strlen($data['NewPassword']) < Config::inst()->get('ProtectedAreaUser','min_password_length'))
+		if (strlen($data['NewPassword']) < Config::inst()->get(ProtectedAreaUser::class,'min_password_length'))
 		{
-			$form->sessionMessage('Password must be at least '.Config::inst()->get('ProtectedAreaUser','min_password_length').' characters','bad');
+			$form->sessionMessage('Password must be at least '.Config::inst()->get(ProtectedAreaUser::class,'min_password_length').' characters','bad');
 			return $this->redirectBack();
 		}
 		$User->ChangePassword = $data['NewPassword'];

@@ -1,17 +1,21 @@
 <?php
 
 
-use SilverStripe\ORM;
-use SilverStripe\Forms;
+namespace IQnection\ProtectedArea\Model;
 
-class ProtectedAreaUserGroup extends ORM\DataObject
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms;
+use SilverStripe\ORM\ArrayList;
+use IQnection\ProtectedArea\ProtectedAreaPage\ProtectedAreaPage;
+
+class ProtectedAreaUserGroup extends DataObject
 {
 	private static $db = [
 		'Title' => 'Varchar(255)'
 	];
 	
 	private static $many_many = [
-		'Pages' => Page::class
+		'Pages' => \Page::class
 	];
 
 	private static $belongs_many_many = [
@@ -35,8 +39,6 @@ class ProtectedAreaUserGroup extends ORM\DataObject
 			$fields->addFieldToTab('Root.Main.MainTabs.Users', $usersGridField );
 			$fields->addFieldToTab('Root.Main.MainTabs.Pages', $pagesGridField );
 			$pagesGridField->getConfig()->removeComponentsByType('GridFieldAddNewButton');
-//			$pagesGridField->getConfig()->getComponentByType('GridFieldAddExistingAutocompleter')
-//				->setSearchList(Page::get()->filter('ID',$this->getAllProtectedPages()->column('ID')));
 			$fields->addFieldToTab('Root.Main.MainTabs.Pages', Forms\CheckboxSetField::create('Pages','Allowed Pages')
 				->addExtraClass('vertical')
 				->setSource($this->PageSelectionOptions()) );
@@ -45,6 +47,7 @@ class ProtectedAreaUserGroup extends ORM\DataObject
 		{
 			$fields->addFieldToTab('Root.Main', Forms\HeaderField::create('note','You must save before adding users and/or pages',2) );
 		}
+		$this->extend('updateCMSFields',$fields);
 		return $fields;
 	}
 
@@ -58,9 +61,9 @@ class ProtectedAreaUserGroup extends ORM\DataObject
 		$list = array();
 		foreach(ProtectedAreaPage::get() as $ProtectedArea)
 		{
-			if ($ProtectedArea->ClassName != 'ProtectedAreaPage')
+			if ($ProtectedArea->ClassName != ProtectedAreaPage::class)
 			{
-				$list[$ProtectedPage->ID] = $ProtectedArea->Breadcrumbs(20,true,'ProtectedAreaPage',true,'/');
+				$list[$ProtectedPage->ID] = $ProtectedArea->Breadcrumbs(20,true,ProtectedAreaPage::class,true,'/');
 			}
 			$this->addChildrenToOptionList($ProtectedArea,$list);
 		}
@@ -73,7 +76,7 @@ class ProtectedAreaUserGroup extends ORM\DataObject
 		{
 			foreach($Parent->AllChildren() as $child)
 			{
-				$list[$child->ID] = $child->Breadcrumbs(20,true,'ProtectedAreaPage',true);
+				$list[$child->ID] = $child->Breadcrumbs(20,true,ProtectedAreaPage::class,true);
 				$this->addChildrenToOptionList($child,$list);
 			}
 		}
@@ -106,7 +109,7 @@ class ProtectedAreaUserGroup extends ORM\DataObject
 	
 	public function getAllProtectedPages()
 	{
-		$protectedPages = new SilverStripe\ORM\ArrayList();
+		$protectedPages = new ArrayList();
 		foreach(ProtectedAreaPage::get() as $protectedArea)
 		{
 			$protectedPages->merge($protectedArea->ProtectedPages());

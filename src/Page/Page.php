@@ -1,10 +1,15 @@
 <?php
 
 
-use SilverStripe\ORM;
-use SilverStripe\Forms;
+namespace IQnection\ProtectedArea\Page;
 
-class ProtectedAreaPageExtension extends ORM\DataExtension
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms;
+use IQnection\ProtectedArea\Model\ProtectedAreaUserGroup;
+use IQnection\ProtectedArea\Model\ProtectedAreaUser;
+use IQnection\ProtectedArea\ProtectedAreaPage\ProtectedAreaPage;
+
+class Page extends DataExtension
 {	
 	private static $belongs_many_many = [
 		'ProtectedAreaUserGroups' => ProtectedAreaUserGroup::class
@@ -14,13 +19,6 @@ class ProtectedAreaPageExtension extends ORM\DataExtension
 	{
 		if ($this->isInProtectedArea())
 		{
-//			$fields->addFieldToTab('Root.AccessControl', Forms\GridField\GridField::create(
-//				'ProtectedAreaUserGroups',
-//				'Allowed User Groups',
-//				$this->owner->ProtectedAreaUserGroups(),
-//				$ppug_gfConfig = Forms\GridField\GridFieldConfig_RelationEditor::create()
-//			));
-//			$ppug_gfConfig->removeComponentsByType('GridFieldAddNewButton');
 			$fields->addFieldToTab('Root.AccessControl', Forms\LiteralField::create('access-note','<p>Uncheck all selections to inherit parent page permissions</p>') );
 			$fields->addFieldToTAb('Root.AccessControl', Forms\CheckboxSetField::create('ProtectedAreaUserGroups','Allowed User Groups')
 				->setValue($this->owner->ProtectedAreaUserGroups())
@@ -60,7 +58,7 @@ class ProtectedAreaPageExtension extends ORM\DataExtension
 	public function ProtectiveParent()
 	{
 		// is this the top level protected page
-		if ($this->owner->ClassName == 'ProtectedAreaPage')
+		if ($this->owner->ClassName == ProtectedAreaPage::class)
 		{
 			return $this->owner;
 		}

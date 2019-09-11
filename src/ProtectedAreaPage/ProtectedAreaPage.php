@@ -1,11 +1,16 @@
 <?php
 
-use SilverStripe\Forms;
-use SilverStripe\ORM;
+namespace IQnection\ProtectedArea\ProtectedAreaPage;
 
-class ProtectedAreaPage extends Page
+use SilverStripe\Forms;
+use SilverStripe\ORM\ArrayList;
+use IQnection\ProtectedArea\Model\ProtectedAreaUserGroup;
+use IQnection\ProtectedArea\Model\ProtectedAreaUser;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
+
+class ProtectedAreaPage extends \Page
 {
-	private static $icon = 'iq-protectedareapage/images/secure-area-page.png';
+	private static $icon = 'iqnection-pages/protectedareapage:images/secure-area-page.png';
 	
 	private static $defaults = [
 		'ShowInMenus' => false,
@@ -15,7 +20,7 @@ class ProtectedAreaPage extends Page
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab('Root.Help', Forms\LiteralField::create('help',file_get_contents(PROTECTED_AREA_PAGE_ROOT.'/instructions.html')) );
+		$fields->addFieldToTab('Root.Help', Forms\LiteralField::create('help',file_get_contents(ModuleResourceLoader::singleton()->resolveURL('iqnection-pages/protectedareapage:docs/instructions.html'))) );
 		if (!ProtectedAreaUserGroup::get()->Count())
 		{
 			$fields->addFieldToTab('Root.Users', Forms\HeaderField::create('Users','You must create User Groups before creating users',2) );
@@ -40,7 +45,7 @@ class ProtectedAreaPage extends Page
 	
 	public function ProtectedPages()
 	{
-		$ProtectedPages = new ORM\ArrayList();
+		$ProtectedPages = ArrayList::create();
 		$this->getChildProtectedPages($this,$ProtectedPages);
 		return $ProtectedPages;
 	}
