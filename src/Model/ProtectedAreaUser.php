@@ -10,6 +10,8 @@ use SilverStripe\Control\Cookie;
 
 class ProtectedAreaUser extends ORM\DataObject
 {
+	private static $table_name = 'ProtectedAreaUser';
+	
 	private static $admin_can_set_password = false;
 	private static $user_can_update_password = true;
 	private static $auto_generate_password = true;

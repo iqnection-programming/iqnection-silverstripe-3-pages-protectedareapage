@@ -1,6 +1,6 @@
 <?php
 
-namespace IQnection\ProtectedArea\ProtectedAreaPage;
+namespace IQnection\ProtectedArea;
 
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms;

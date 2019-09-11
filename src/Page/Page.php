@@ -7,7 +7,7 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\Forms;
 use IQnection\ProtectedArea\Model\ProtectedAreaUserGroup;
 use IQnection\ProtectedArea\Model\ProtectedAreaUser;
-use IQnection\ProtectedArea\ProtectedAreaPage\ProtectedAreaPage;
+use IQnection\ProtectedArea\ProtectedAreaPage;
 
 class Page extends DataExtension
 {	

@@ -5,6 +5,7 @@ namespace IQnection\ProtectedArea\Page;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\Security\Security;
+use SilverStripe\View\Requirements;
 
 class PageController extends Extension
 {

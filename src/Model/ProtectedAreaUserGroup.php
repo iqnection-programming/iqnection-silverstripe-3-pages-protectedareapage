@@ -6,10 +6,12 @@ namespace IQnection\ProtectedArea\Model;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\ORM\ArrayList;
-use IQnection\ProtectedArea\ProtectedAreaPage\ProtectedAreaPage;
+use IQnection\ProtectedArea\ProtectedAreaPage;
 
 class ProtectedAreaUserGroup extends DataObject
 {
+	private static $table_name = 'ProtectedAreaUserGroup';
+	
 	private static $db = [
 		'Title' => 'Varchar(255)'
 	];
