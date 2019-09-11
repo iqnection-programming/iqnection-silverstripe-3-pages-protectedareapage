@@ -3,11 +3,11 @@ Name: iqprotectedareapage
 ---
 Page:
   extensions:
-    - ProtectedAreaPageExtension
+    - IQnection\ProtectedArea\Page\Page
 PageController:
   extensions:
-    - ProtectedAreaPageControllerExtension
+    - IQnection\ProtectedArea\Page\PageController
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - iq-protectedareapage/cms/css/leftandmainadditions.css
+    - iqnection-pages/protectedareapage:css/cms/leftandmainadditions.css
 ---

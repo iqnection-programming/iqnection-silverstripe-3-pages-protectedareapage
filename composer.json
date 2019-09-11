@@ -1,20 +1,28 @@
 {
 	"name": "iqnection-pages/protectedareapage",
-	"description": "SilverStripe Protected Area Page",
-	"type": "silverstripe-module",
-	"keywords": ["iqnection","pages"],
+	"description": "SilverStripe Protected Area",
+	"type": "silverstripe-vendormodule",
+	"keywords": ["iqnection","pages","protected pages"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "IQnection",
-            "homepage": "http://www.iqnection.com"
+            "homepage": "https://www.iqnection.com"
 		}
 	],
 	"require": {
-		"silverstripe/framework": "^4.0",
-		"iqnection-pages/basepages":"*"
+		"silverstripe/framework": "^4.1",
+		"iqnection-pages/basepages":"^2.1"
 	},
 	"extra": {
-		"installer-name": "iq-protectedareapage"
+		"expose": [
+			"css",
+			"images"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"IQnection\\ProtectedArea\\": "app/src/"
+		}
 	}
 }
