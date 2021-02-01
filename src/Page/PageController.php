@@ -12,7 +12,7 @@ class PageController extends Extension
 	private static $allowed_actions = [
 		'permission_error'
 	];
-	
+
 	public function beforeCallActionHandler(&$request,&$action)
 	{
 		if (Security::getCurrentUser()) { return; }
@@ -53,13 +53,13 @@ class PageController extends Extension
 				{
 					$action = 'permission_error';
 					return $this->permission_error();
-				}				
+				}
 			}
 		}
-	}	
-	
+	}
+
 	public function permission_error()
 	{
-		return $this->owner->renderWith(array('ProtectedAreaPage_permission_error','MinisitePage','Page'));
+		return $this->owner->renderWith(array('ProtectedAreaPage_permission_error','Page'));
 	}
 }

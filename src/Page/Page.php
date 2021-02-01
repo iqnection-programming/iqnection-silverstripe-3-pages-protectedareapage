@@ -10,11 +10,16 @@ use IQnection\ProtectedArea\Model\ProtectedAreaUser;
 use IQnection\ProtectedArea\ProtectedAreaPage;
 
 class Page extends DataExtension
-{	
+{
 	private static $belongs_many_many = [
 		'ProtectedAreaUserGroups' => ProtectedAreaUserGroup::class
 	];
-	
+
+	public function canView(&$can)
+	{
+		$can = $this->UserCanViewPage();
+	}
+
 	public function updateCMSFields(Forms\FieldList $fields)
 	{
 		if ($this->isInProtectedArea())
@@ -30,7 +35,7 @@ class Page extends DataExtension
 		}
 		return $fields;
 	}
-		
+
 	public function CanGroupViewProtectedContent($ProtectedUserGroupID)
 	{
 		if (is_object($ProtectedUserGroupID)) { $ProtectedUserGroupID = $ProtectedUserGroupID->ID; }
@@ -49,12 +54,12 @@ class Page extends DataExtension
 		// is this page directly accessible by the group
 		return ($this->owner->ProtectedAreaUserGroups()->byID($ProtectedUserGroupID));
 	}
-	
+
 	public function isInProtectedArea()
 	{
 		return (bool) $this->owner->ProtectiveParent();
 	}
-	
+
 	public function ProtectiveParent()
 	{
 		// is this the top level protected page
@@ -62,18 +67,18 @@ class Page extends DataExtension
 		{
 			return $this->owner;
 		}
-		if ($this->owner->Parent()->Exists())
+		if ( ($this->owner->Parent()) && ($this->owner->Parent()->Exists()) )
 		{
 			return $this->owner->Parent()->ProtectiveParent();
 		}
 		return false;
 	}
-	
+
 	public function ProtectedAreaUser()
 	{
 		return ProtectedAreaUser::CurrentSiteUser();
 	}
-	
+
 	public function UserCanViewPage()
 	{
 		$allowed = true;
@@ -84,7 +89,7 @@ class Page extends DataExtension
 		}
 		return $allowed;
 	}
-	
+
 	public function AllowedProtectedAccess($Page,$protectedUser)
 	{
 		if (!$protectedUser) { return false; }
